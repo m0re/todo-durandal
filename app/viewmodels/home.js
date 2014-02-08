@@ -8,6 +8,7 @@ define(["knockout", "knockback",
         DoneTodos = new Todos(),
         todos = kb.collectionObservable(ActiveTodos),
         done = kb.collectionObservable(DoneTodos),
+        errors = ko.observableArray([]),
         selectedTodo = ko.observable(),
         todoText = ko.observable(),
         isLoading = ko.observable(false),
@@ -25,6 +26,8 @@ define(["knockout", "knockback",
             app.showMessage(message, messageTitle);
         },
         refreshData = function(){
+        	ActiveTodos.comparator = 'text';
+        	DoneTodos.comparator = 'text';
             ActiveTodos.fetch({
              data:{ status: "Active" } , 
              success:function(){
@@ -35,6 +38,7 @@ define(["knockout", "knockback",
              success:function(){
                    isLoading(false);
             }});
+            errors.removeAll();
         },
         // Lifecycle Methods
         activate = function activate() {
@@ -72,15 +76,27 @@ define(["knockout", "knockback",
                 text: todoText(),
                 status: "Active"
             });
-            newThing.save({},{success:function(){
-                refreshData()
-            }});
+            newThing.save({},{
+	            success:function(){
+	            	todoText("");
+	                refreshData()
+            	},
+            	error:function(model, response){
+	            	errors.removeAll();
+	            	var responseJson = JSON.parse(response.responseText);
+	            	for(var i=0; i<responseJson.errors.length; i++){
+	            		errors.push(responseJson.errors[i]);
+	            	}
+	            	
+            	}
+            });
         };
 
 
     return {
         todos: todos,
         done: done,
+        errors: errors,
         deleteItem: deleteItem,
         markDone: markDone,
         todoText: todoText,
