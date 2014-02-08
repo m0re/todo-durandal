@@ -1,0 +1,53 @@
+
+<article class="row">
+    <div class="col-md-5">
+        <h2>Active</h2>
+        <table class="table">
+        <thead>
+        <tr>
+            <th>Things to do</th>
+            <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: todos">
+            <tr>
+                <td data-bind="text: text(), click: $root.selectedTodo, css: { active: $root.selectedTodo() == $data }"></td>
+                <td><button type="button" class="btn">Done</button></td>
+            </tr>
+        </tbody>
+            
+
+        </table>
+    </div>
+    <div class="col-md-5">
+        <h2>Done</h2>
+        <table class="table">
+        <thead>
+        <tr>
+            <th>Things to do</th>
+            <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: done">
+            <tr>
+                <td data-bind="text: text(), click: $root.selectedTodo, css: { active: $root.selectedTodo() == $data }"></td>
+                <td><button type="button" class="btn">Done</button></td>
+            </tr>
+        </tbody>
+            
+
+        </table>
+    </div>
+</article>
+
+<h2>
+    Add a new thing to do
+</h2>
+<form role="form">
+  <div class="form-group">
+    <label for="todo"></label>
+    <input type="text" class="form-control input-lg" id="todo" data-bind="value: todoText">
+  </div>
+  <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+    <button type="button" class="btn btn-primary" data-bind="click: addTodo">Add</button>
+  </form>
