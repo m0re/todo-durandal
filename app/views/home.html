@@ -1,44 +1,4 @@
 
-<article class="row">
-    <div class="col-md-5">
-        <h2>Active</h2>
-        <table class="table">
-        <thead>
-        <tr>
-            <th>Things to do</th>
-            <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: todos">
-            <tr>
-                <td data-bind="text: text(), click: $root.selectedTodo, css: { active: $root.selectedTodo() == $data }"></td>
-                <td><button type="button" class="btn">Done</button></td>
-            </tr>
-        </tbody>
-            
-
-        </table>
-    </div>
-    <div class="col-md-5">
-        <h2>Done</h2>
-        <table class="table">
-        <thead>
-        <tr>
-            <th>Things to do</th>
-            <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: done">
-            <tr>
-                <td data-bind="text: text(), click: $root.selectedTodo, css: { active: $root.selectedTodo() == $data }"></td>
-                <td><button type="button" class="btn">Done</button></td>
-            </tr>
-        </tbody>
-            
-
-        </table>
-    </div>
-</article>
 
 <h2>
     Add a new thing to do
@@ -51,3 +11,48 @@
   <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
     <button type="button" class="btn btn-primary" data-bind="click: addTodo">Add</button>
   </form>
+<hr/>
+<article class="row">
+    <div class="col-md-6">
+        <h2>Active</h2>
+        <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: todos">
+            <tr>
+                <td width="150" data-bind="text: text(), click: $root.selectedTodo, css: { active: $root.selectedTodo() == $data }"></td>
+                <td ><button type="button" data-bind="click: $root.markDone.bind($data, id())" class="btn">Done</button>
+                <button type="button" data-bind="click: $root.deleteItem.bind($data, id())" class="btn">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+            
+
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h2>Done</h2>
+        <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: done">
+            <tr>
+                <td width="150" data-bind="text: text(), click: $root.selectedTodo, css: { active: $root.selectedTodo() == $data }"></td>
+                <td >                <button type="button" data-bind="click: $root.deleteItem.bind($data, id())" class="btn">Delete</button>
+                </td>
+            </tr>
+
+        </tbody>
+            
+
+        </table>
+    </div>
+</article>

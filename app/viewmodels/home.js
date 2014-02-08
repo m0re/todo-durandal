@@ -24,10 +24,7 @@ define(["knockout", "knockback",
         onButtonClick = function onButtonClick() {
             app.showMessage(message, messageTitle);
         },
-
-        // Lifecycle Methods
-        activate = function activate() {
-            isLoading(true)
+        refreshData = function(){
             ActiveTodos.fetch({
              data:{ status: "Active" } , 
              success:function(){
@@ -38,19 +35,45 @@ define(["knockout", "knockback",
              success:function(){
                    isLoading(false);
             }});
-         
         },
-
+        // Lifecycle Methods
+        activate = function activate() {
+            isLoading(true)
+            refreshData()
+        },
         deactivate = function deactivate() {
             selectedTodo(null);
+        },
+        markDone = function(id){
+       
+            var currentItem = ActiveTodos.get(id);
+            if(!currentItem){
+                alert("That thing is done")
+            }
+        
+            currentItem.save({status:"Done"}, 
+                { success: function(){
+                    refreshData()
+                }});
+        },
+        deleteItem = function(id){
+            
+            var currentItem = ActiveTodos.get(id);
+            if(!currentItem){
+                currentItem = DoneTodos.get(id);
+            }
+            currentItem.destroy( 
+                { success: function(){
+                    refreshData()
+                }});
         },
         addTodo = function(){
             var newThing = new Todo({
                 text: todoText(),
                 status: "Active"
             });
-            newThing.save({success:function(){
-                Todos.fetch();
+            newThing.save({},{success:function(){
+                refreshData()
             }});
         };
 
@@ -58,6 +81,8 @@ define(["knockout", "knockback",
     return {
         todos: todos,
         done: done,
+        deleteItem: deleteItem,
+        markDone: markDone,
         todoText: todoText,
         addTodo:addTodo,
         selectedTodo: selectedTodo,
